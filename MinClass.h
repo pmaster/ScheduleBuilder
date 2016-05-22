@@ -28,10 +28,17 @@ public:
 
 	void set_courseID(std::string courseID);
 	std::string get_courseID( ) const;
+	void set_courseTitle(std::string courseTitle);
+	std::string get_courseTitle( );
+	void set_courseTitleFull(std::string courseTitleFull);
+	std::string get_courseTitleFull( );
+	void set_detailsFinal(Event final);
+	Event get_detailsFinal( );
 	
+	// needed: some member functions to handle 'lectures' vector
 
 private:
-	std::string courseID, title, fullTitle; //ex.: CMPSC 56, ADV APP PROGRAM, Advanced Applications Programming
+	std::string courseID, courseTitle, courseTitleFull; //ex.: CMPSC 56, ADV APP PROGRAM, Advanced Applications Programming
 	std::vector<Lecture> lectures;
 	Event final;
 };

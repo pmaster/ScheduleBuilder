@@ -35,3 +35,26 @@ std::string MinClass::get_courseID( ) const {
 	return courseID;	
 }
 
+void MinClass::set_courseTitle(std::string courseTitle) {
+	this->courseTitle = courseTitle;
+}
+
+std::string get_courseTitle( ) {
+	return courseTitle;
+}
+	
+void set_courseTitleFull(std::string courseTitleFull) {
+	this->courseTitleFull = courseTitleFull;
+}
+
+std::string get_courseTitleFull( ) {
+	return courseTitleFull
+}
+
+void set_detailsFinal(Event final) {
+	this->final = final;
+}
+
+Event get_detailsFinal( ) {
+	return final;
+}
