@@ -6,6 +6,9 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm> //find
+#include <string> //to_string
+#include <sstream> //stringstream
 
 enum DayOfTheWeek {invalid = -1, ONLINE, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday,
                     inv = -1, online, M, T, W, R, F, S, N};
@@ -51,10 +54,20 @@ private:
 	Event final;
 };
 
+std::string DOTW_to_day_char(DayOfTheWeek d);
+std::string military_to_12hour(int time);
+std::ostream& operator<<(std::ostream& os, const MinClass& obj);
+std::ostream& operator<<(std::ostream& os, const MinClass::Lecture& obj);
+std::ostream& operator<<(std::ostream& os, const MinClass::Event& obj);
+std::vector<DayOfTheWeek> vecDays(DayOfTheWeek a = invalid, DayOfTheWeek b = invalid,
+                                  DayOfTheWeek c = invalid, DayOfTheWeek d = invalid,
+                                  DayOfTheWeek e = invalid, DayOfTheWeek f = invalid,
+                                  DayOfTheWeek g = invalid);
+
 /*
 class FullClass : public MClass
 {
-	//add pre-/co-requisites, locations of lectures, final, quarters offered
+	//add pre-/co-requisites, locations of lectures, final, quarters offered, teachers
 	//int units, unitsMin, unitsMax; // not just "units" because some classes have unit ranges
 }
 */
