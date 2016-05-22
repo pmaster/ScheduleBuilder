@@ -4,37 +4,37 @@
 #include <iostream>
 #include <vector>
 
-enum DayOfTheWeek {Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday};
-
-struct Lecture {
-	Event lecture;
-	std::vector<event> sections;
-};
+enum DayOfTheWeek {Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
 
 struct Event {
 	unsigned start, end; // format: military time
 	DayOfTheWeek day;
+	// char EnrollCode[5];
+};
 
+struct Lecture {
+	Event lecture;
+	std::vector<Event> sections;
 };
 
 class MinClass
 {
 public:
-
-//units, lecture time, quarters/sessions offered, prerequisites, location, final
+	MinClass(std::string goldFullLine/*SOC 1  - INTRO TO SOCIOLOGY*/, )
+	MinClass(std::string dept, std::string deptID, std::vector<Lecture> lectures) :
+		dept(dept), deptID(deptID), lectures(lectures) { }
+	MinClass(std::vector<Lecture> lectures) : lectures(lectures) { }
 
 private:
-	int units, unitsMin, unitsMax; // not just "units" because some classes have unit ranges
-	int sectionCode;
-	std::string dept, deptID, title, fullTitle; //ex.: CS, 56, ADV APP PROGRAM, Advanced Applications Programming
+	std::string dept, deptID, title, fullTitle; //ex.: CMPSC, 56, ADV APP PROGRAM, Advanced Applications Programming
 	std::vector<Lecture> lectures;
 	Event final;
-}
+};
 
 /*
 class FullClass : public MClass
 {
-	//add pre-/co-requisites, locations of lectures, final
+	//add pre-/co-requisites, locations of lectures, final, quarters offered
 	//int units, unitsMin, unitsMax; // not just "units" because some classes have unit ranges
 }
 */
