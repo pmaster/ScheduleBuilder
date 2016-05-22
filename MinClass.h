@@ -12,24 +12,32 @@
 
 enum DayOfTheWeek {invalid = -1, ONLINE, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday,
                     inv = -1, online, M, T, W, R, F, S, N};
+class Event
+{
+public:
+    Event(std::vector<DayOfTheWeek> days = std::vector<DayOfTheWeek>( ), int start = -1,
+            int end = -1, std::vector<int> dates = std::vector<int>( )) : days(days),
+            start(start), end(end), dates(dates) { }
+    Event(int date, std::vector<DayOfTheWeek> days = std::vector<DayOfTheWeek>( ), int start = -1,
+            int end = -1) : days(days),
+            start(start), end(end), dates(std::vector<int>( )) { dates.push_back(date); }
+    std::vector<DayOfTheWeek> days;
+    int start, end; // format: military time
+    std::vector<int> dates; //format MMDD
+};
+
+class Lecture {
+public:
+    Lecture(Event lecture = Event( ), std::vector<Event> sections = std::vector<Event>( ),
+            Event final = Event( )) : lecture(lecture), final(final), sections(sections) { }
+
+    Event lecture, final;
+    std::vector<Event> sections;
+};
 
 class MinClass
 {
 public:
-	struct Event {
-	    Event(std::vector<DayOfTheWeek> days = std::vector<DayOfTheWeek>(0), int start = -1,
-           int end = -1) : days(days), start(start), end(end) { }
-		std::vector<DayOfTheWeek> days;
-		int start, end; // format: military time
-	};
-
-	struct Lecture {
-	    Lecture(Event lecture = Event( ), std::vector<Event> sections = std::vector<Event>( ))
-        : lecture(lecture), sections(sections) { }
-		Event lecture;
-		std::vector<Event> sections;
-	};
-
 	MinClass(std::string courseID);
 	MinClass(std::vector<Lecture> lectures);
 	MinClass(std::string courseID, std::vector<Lecture> lectures);
@@ -51,14 +59,14 @@ public:
 private:
 	std::string courseID, courseTitle, courseTitleFull; //ex.: CMPSC 56, ADV APP PROGRAM, Advanced Applications Programming
 	std::vector<Lecture> lectures;
-	Event final;
+	//Event final;
 };
 
 std::string DOTW_to_day_char(DayOfTheWeek d);
 std::string military_to_12hour(int time);
 std::ostream& operator<<(std::ostream& os, const MinClass& obj);
-std::ostream& operator<<(std::ostream& os, const MinClass::Lecture& obj);
-std::ostream& operator<<(std::ostream& os, const MinClass::Event& obj);
+std::ostream& operator<<(std::ostream& os, const Lecture& obj);
+std::ostream& operator<<(std::ostream& os, const Event& obj);
 std::vector<DayOfTheWeek> vecDays(DayOfTheWeek a = invalid, DayOfTheWeek b = invalid,
                                   DayOfTheWeek c = invalid, DayOfTheWeek d = invalid,
                                   DayOfTheWeek e = invalid, DayOfTheWeek f = invalid,

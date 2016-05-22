@@ -66,6 +66,7 @@ std::string MinClass::get_courseTitleFull( ) const {
 	return courseTitleFull;
 }
 
+/*
 void MinClass::set_detailsFinal(Event final) {
 	this->final = final;
 }
@@ -73,17 +74,18 @@ void MinClass::set_detailsFinal(Event final) {
 MinClass::Event MinClass::get_detailsFinal( ) const {
 	return final;
 }
+*/
 
 void MinClass::set_lectures(std::vector<Lecture> lectures) {
 	this->lectures = lectures;
 }
 
-std::vector<MinClass::Lecture> MinClass::get_lectures( ) const {
+std::vector<Lecture> MinClass::get_lectures( ) const {
 	return lectures;
 }
 
 std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
-    std::vector<MinClass::Lecture> lectures = obj.get_lectures( );
+    std::vector<Lecture> lectures = obj.get_lectures( );
 
     os << std::endl << obj.get_courseID( );
     if (obj.get_courseTitle( ) != "")
@@ -100,7 +102,7 @@ std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const MinClass::Lecture& obj) {
+std::ostream& operator<<(std::ostream& os, const Lecture& obj) {
     os << obj.lecture << std::endl;
     for (unsigned i = 0; i < obj.sections.size( ); i++)
         os << "     " << obj.sections[i] << std::endl;
@@ -108,7 +110,7 @@ std::ostream& operator<<(std::ostream& os, const MinClass::Lecture& obj) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, const MinClass::Event& obj) {
+std::ostream& operator<<(std::ostream& os, const Event& obj) {
     if (obj.days.size( )) {
         if (obj.days[0] == ONLINE)
             os << "ONLINE";
