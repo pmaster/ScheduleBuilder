@@ -16,21 +16,39 @@ class Event
 {
 public:
     Event(std::vector<DayOfTheWeek> days = std::vector<DayOfTheWeek>( ), int start = -1,
-            int end = -1, std::vector<int> dates = std::vector<int>( )) : days(days),
-            start(start), end(end), dates(dates) { }
-    Event(int date, std::vector<DayOfTheWeek> days = std::vector<DayOfTheWeek>( ), int start = -1,
-            int end = -1) : days(days),
-            start(start), end(end), dates(std::vector<int>( )) { dates.push_back(date); }
+                int end = -1, std::vector<int> dates = std::vector<int>( ));
+    Event(int date, std::vector<DayOfTheWeek> days = std::vector<DayOfTheWeek>( ),
+                int start = -1, int end = -1);
+
+    int get_startTime( ) const;
+    void set_startTime(int time);
+    int get_endTime( ) const;
+    void set_endTime(int time);
+    int get_date( ) const;
+    void set_date(int date);
+    std::vector<DayOfTheWeek> get_days( ) const;
+    void set_days(std::vector<DayOfTheWeek> days);
+
+private:
     std::vector<DayOfTheWeek> days;
     int start, end; // format: military time
     std::vector<int> dates; //format MMDD
 };
 
-class Lecture {
+class Lecture
+{
 public:
     Lecture(Event lecture = Event( ), std::vector<Event> sections = std::vector<Event>( ),
-            Event final = Event( )) : lecture(lecture), final(final), sections(sections) { }
+                Event final = Event( ));
 
+    Event get_lecture( ) const;
+    void set_lecture(Event lecture);
+    Event get_final( ) const;
+    void set_final(Event final);
+    std::vector<Event> get_sections( ) const;
+    void set_sections(std::vector<Event> sections);
+
+private:
     Event lecture, final;
     std::vector<Event> sections;
 };
@@ -44,16 +62,16 @@ public:
 	//MinClass(std::string goldFullLine);
 	//MinClass(std::string goldFullLine, std::vector<Lecture> lectures);
 
-	void set_courseID(std::string courseID);
 	std::string get_courseID( ) const;
-	void set_courseTitle(std::string courseTitle);
+	void set_courseID(std::string courseID);
 	std::string get_courseTitle( ) const;
-	void set_courseTitleFull(std::string courseTitleFull);
+	void set_courseTitle(std::string courseTitle);
 	std::string get_courseTitleFull( ) const;
-	void set_detailsFinal(Event final);
+	void set_courseTitleFull(std::string courseTitleFull);
 	Event get_detailsFinal( ) const;
-	void set_lectures(std::vector<Lecture> lectures);
+	void set_detailsFinal(Event final);
 	std::vector<Lecture> get_lectures( ) const;
+	void set_lectures(std::vector<Lecture> lectures);
 	// needed: some member functions to handle 'lectures' vector
 
 private:

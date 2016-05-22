@@ -3,6 +3,74 @@
 
 #include "MinClass.h"
 
+Event::Event(std::vector<DayOfTheWeek> days, int start,
+            int end, std::vector<int> dates) : days(days),
+            start(start), end(end), dates(dates) { }
+
+Event::Event(int date, std::vector<DayOfTheWeek> days, int start, int end) : days(days),
+            start(start), end(end), dates(std::vector<int>( )) { dates.push_back(date); }
+
+int Event::get_startTime( ) const {
+    return start;
+}
+
+void Event::set_startTime(int time) {
+    start = time;
+}
+
+int Event::get_endTime( ) const {
+    return end;
+}
+void Event::set_endTime(int time) {
+    end = time;
+}
+
+int Event::get_date( ) const {
+    if (dates.empty( ))
+        return -1;
+    return dates.front( );
+}
+
+void Event::set_date(int date) {
+    dates.clear( );
+    dates.push_back(date);
+}
+
+std::vector<DayOfTheWeek> Event::get_days( ) const {
+    return days;
+}
+
+void Event::set_days(std::vector<DayOfTheWeek> days) {
+        this->days = days;
+}
+Lecture::Lecture(Event lecture, std::vector<Event> sections, Event final)
+            : lecture(lecture), final(final), sections(sections) { }
+
+Event Lecture::get_lecture( ) const {
+    return lecture;
+}
+
+void Lecture::set_lecture(Event lecture) {
+    this->lecture = lecture;
+}
+
+Event Lecture::get_final( ) const {
+    return final;
+}
+
+void Lecture::set_final(Event final) {
+    this->final = final;
+}
+
+std::vector<Event> Lecture::get_sections( ) const {
+    return sections;
+}
+
+void Lecture::set_sections(std::vector<Event> sections) {
+    this->sections = sections;
+}
+
+
 MinClass::MinClass(std::string courseID) : courseID(courseID) {
 	courseTitle = "";
 	courseTitleFull = "";
@@ -41,29 +109,28 @@ MinClass::MinClass(std::string goldFullLine,
 }
 */
 
-void MinClass::set_courseID(std::string courseID) {
-	this->courseID = courseID;
-}
-
-
 std::string MinClass::get_courseID( ) const {
 	return courseID;
 }
 
-void MinClass::set_courseTitle(std::string courseTitle) {
-	this->courseTitle = courseTitle;
+void MinClass::set_courseID(std::string courseID) {
+	this->courseID = courseID;
 }
 
 std::string MinClass::get_courseTitle( ) const {
 	return courseTitle;
 }
 
-void MinClass::set_courseTitleFull(std::string courseTitleFull) {
-	this->courseTitleFull = courseTitleFull;
+void MinClass::set_courseTitle(std::string courseTitle) {
+	this->courseTitle = courseTitle;
 }
 
 std::string MinClass::get_courseTitleFull( ) const {
 	return courseTitleFull;
+}
+
+void MinClass::set_courseTitleFull(std::string courseTitleFull) {
+	this->courseTitleFull = courseTitleFull;
 }
 
 /*
@@ -76,12 +143,12 @@ MinClass::Event MinClass::get_detailsFinal( ) const {
 }
 */
 
-void MinClass::set_lectures(std::vector<Lecture> lectures) {
-	this->lectures = lectures;
-}
-
 std::vector<Lecture> MinClass::get_lectures( ) const {
 	return lectures;
+}
+
+void MinClass::set_lectures(std::vector<Lecture> lectures) {
+	this->lectures = lectures;
 }
 
 std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
@@ -103,21 +170,21 @@ std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Lecture& obj) {
-    os << obj.lecture << std::endl;
-    for (unsigned i = 0; i < obj.sections.size( ); i++)
-        os << "     " << obj.sections[i] << std::endl;
+    os << obj.get_lecture( ) << std::endl;
+    for (unsigned i = 0; i < obj.get_sections( ).size( ); i++)
+        os << "     " << obj.get_sections( )[i] << std::endl;
     os << std::endl;
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Event& obj) {
-    if (obj.days.size( )) {
-        if (obj.days[0] == ONLINE)
+    if (obj.get_days( ).size( )) {
+        if (obj.get_days( )[0] == ONLINE)
             os << "ONLINE";
         else
-            for (unsigned i = 0; i < obj.days.size( ); i++)
-                os << DOTW_to_day_char(obj.days[i]);
-            os << "  " << military_to_12hour(obj.start) << " - " << military_to_12hour(obj.end);
+            for (unsigned i = 0; i < obj.get_days( ).size( ); i++)
+                os << DOTW_to_day_char(obj.get_days( )[i]);
+            os << "  " << military_to_12hour(obj.get_startTime( )) << " - " << military_to_12hour(obj.get_endTime( ));
     }
     return os;
 }
