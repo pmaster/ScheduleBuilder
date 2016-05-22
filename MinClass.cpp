@@ -39,22 +39,30 @@ void MinClass::set_courseTitle(std::string courseTitle) {
 	this->courseTitle = courseTitle;
 }
 
-std::string get_courseTitle( ) {
+std::string MinClass::get_courseTitle( ) {
 	return courseTitle;
 }
 	
-void set_courseTitleFull(std::string courseTitleFull) {
+void MinClass::set_courseTitleFull(std::string courseTitleFull) {
 	this->courseTitleFull = courseTitleFull;
 }
 
-std::string get_courseTitleFull( ) {
+std::string MinClass::get_courseTitleFull( ) {
 	return courseTitleFull
 }
 
-void set_detailsFinal(Event final) {
+void MinClass::set_detailsFinal(Event final) {
 	this->final = final;
 }
 
-Event get_detailsFinal( ) {
+Event MinClass::get_detailsFinal( ) {
 	return final;
+}
+
+void MinClass::set_lectures(std::vector<Lecture> lectures) {
+	this->lectures = lectures;
+}
+
+std::vector<Lecture> MinClass::get_lectures( ) {
+	return lectures;
 }

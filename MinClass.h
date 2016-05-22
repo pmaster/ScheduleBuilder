@@ -12,7 +12,6 @@ public:
 	struct Event {
 		unsigned start, end; // format: military time
 		DayOfTheWeek day;
-		// char EnrollCode[5];
 	};
 
 	struct Lecture {
@@ -34,7 +33,8 @@ public:
 	std::string get_courseTitleFull( );
 	void set_detailsFinal(Event final);
 	Event get_detailsFinal( );
-	
+	void set_lectures(std::vector<Lecture> lectures);
+	std::vector<Lecture> get_lectures( );
 	// needed: some member functions to handle 'lectures' vector
 
 private:
