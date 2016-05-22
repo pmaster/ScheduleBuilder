@@ -7,26 +7,31 @@
 #include <iostream>
 #include <vector>
 
-enum DayOfTheWeek {invalid, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
+enum DayOfTheWeek {invalid = -1, ONLINE, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday,
+                    inv = -1, online, M, T, W, R, F, S, N};
 
 class MinClass
 {
 public:
 	struct Event {
-		DayOfTheWeek day;
-		unsigned start, end; // format: military time
+	    Event(std::vector<DayOfTheWeek> days = std::vector<DayOfTheWeek>(0), int start = -1,
+           int end = -1) : days(days), start(start), end(end) { }
+		std::vector<DayOfTheWeek> days;
+		int start, end; // format: military time
 	};
 
 	struct Lecture {
+	    Lecture(Event lecture = Event( ), std::vector<Event> sections = std::vector<Event>( ))
+        : lecture(lecture), sections(sections) { }
 		Event lecture;
 		std::vector<Event> sections;
 	};
 
-	MinClass(std::string goldFullLine/*SOC 1  - INTRO TO SOCIOLOGY*/);
+	MinClass(std::string courseID);
 	MinClass(std::vector<Lecture> lectures);
 	MinClass(std::string courseID, std::vector<Lecture> lectures);
-	MinClass(std::string goldFullLine/*SOC 1  - INTRO TO SOCIOLOGY*/, 
-			std::vector<Lecture> lectures);
+	//MinClass(std::string goldFullLine);
+	//MinClass(std::string goldFullLine, std::vector<Lecture> lectures);
 
 	void set_courseID(std::string courseID);
 	std::string get_courseID( ) const;
@@ -45,8 +50,6 @@ private:
 	std::vector<Lecture> lectures;
 	Event final;
 };
-
-
 
 /*
 class FullClass : public MClass
