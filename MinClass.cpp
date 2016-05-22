@@ -1,29 +1,38 @@
 // MinClass.cpp, implements MinClass.h
 // Peter Master, 5/21
 
-
+#include "MinClass.h"
 
 MinClass::MinClass(std::string goldFullLine/*SOC 1  - INTRO TO SOCIOLOGY*/) {
 	
-
-
+	// implement an algorithm to break the full line into a string of the course ID
+	// followed by the course title
+	courseTitleFull = "";
+	final.day = invalid;
+	lectures.push_back(Event(invalid));
 }
 
 MinClass::MinClass(std::vector<Lecture> lectures) : lectures(lectures) {
-
-
+	courseID = "";
+	courseTitle = "";
+	courseTitleFull = "";
+	final.day = invalid;
 }
 
 MinClass::MinClass(std::string courseID, std::vector<Lecture> lectures)
 	 : courseID(courseID), lectures(lectures) { 
-
-
+	 courseTitle = "";
+	 courseTitleFull = "";
+	 final.day = invalid;
 }
 
 MinClass::MinClass(std::string goldFullLine/*SOC 1  - INTRO TO SOCIOLOGY*/, 
 			std::vector<Lecture> lectures) {
-
-
+	// implement an algorithm to break the full line into a string of the course ID
+	// followed by the course title
+	courseTitleFull = "";
+	final.day = invalid;
+	lectures.push_back(Event(invalid));
 }
 
 void MinClass::set_courseID(std::string courseID) {

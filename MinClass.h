@@ -1,17 +1,20 @@
 // MinClass.h
 // Peter Master, 5/21
 
+#ifndef MINCLASS_H
+#define MINCLASS_H
+
 #include <iostream>
 #include <vector>
 
-enum DayOfTheWeek {Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
+enum DayOfTheWeek {invalid, Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday};
 
 class MinClass
 {
 public:
 	struct Event {
-		unsigned start, end; // format: military time
 		DayOfTheWeek day;
+		unsigned start, end; // format: military time
 	};
 
 	struct Lecture {
@@ -52,3 +55,5 @@ class FullClass : public MClass
 	//int units, unitsMin, unitsMax; // not just "units" because some classes have unit ranges
 }
 */
+
+#endif
