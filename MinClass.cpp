@@ -114,8 +114,8 @@ std::ostream& operator<<(std::ostream& os, const MinClass::Event& obj) {
             os << "ONLINE";
         else
             for (unsigned i = 0; i < obj.days.size( ); i++)
-                os << DOTW_to_day_char(obj.days[i]) << military_to_12hour(obj.start)
-                << "-" << military_to_12hour(obj.end);
+                os << DOTW_to_day_char(obj.days[i]);
+            os << "  " << military_to_12hour(obj.start) << " - " << military_to_12hour(obj.end);
     }
     return os;
 }
@@ -173,12 +173,18 @@ std::string DOTW_to_day_char(DayOfTheWeek d) {
 }
 
 std::string military_to_12hour(int time) {
-    int hours = time > 1159 ? (time - 1200) / 100 : time / 100, minutes = time % 100;
+    int hours = time < 1300 ? time / 100 : (time - 1200) / 100, minutes = time % 100;
     std::stringstream ssHours, ssMinutes;
     ssHours << hours;
     ssMinutes << minutes;
     std::string sHours = ssHours.str( ), sMinutes = ssMinutes.str( );
     std::string result;
+    if (sHours == "0")
+        sHours = "00";
+    if (sHours.length( ) == 1)
+        sHours = "0" + sHours;
+    if (sMinutes == "0")
+        sMinutes = "00";
     /*
     if (time < 100)
         return std::string("12:") + std::to_string(time % 100) + std::string(" AM");
@@ -188,10 +194,12 @@ std::string military_to_12hour(int time) {
     }
     */
     if (time < 100)
-        return std::string("12:") + sMinutes + std::string(" AM");
+        return std::string("12:") + sMinutes + std::string("AM");
     if (time < 1200)
-        return sHours + std::string(":") + sMinutes + std::string(" AM");
+        return sHours + std::string(":") + sMinutes + std::string("AM");
+    if (time < 1300)
+        return std::string("12:") + sMinutes + std::string("PM");
     if (time == 2400)
         return std::string("12:00 AM");
-    return sHours + std::string(":") + sMinutes + std::string(" PM");
+    return sHours + std::string(":") + sMinutes + std::string("PM");
 }

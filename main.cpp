@@ -20,6 +20,7 @@ int main()
 
     MinClass::Event final1(vecDays(W), 1200, 1500);
     MinClass cs56("CMPSC 56", lectures1);
+    cs56.set_courseTitle("ADV APP PROGRAM");
     cs56.set_courseTitleFull("Advanced Applications Programming");
     cs56.set_detailsFinal(final1);
 
