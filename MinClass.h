@@ -36,13 +36,13 @@ public:
 	void set_courseID(std::string courseID);
 	std::string get_courseID( ) const;
 	void set_courseTitle(std::string courseTitle);
-	std::string get_courseTitle( );
+	std::string get_courseTitle( ) const;
 	void set_courseTitleFull(std::string courseTitleFull);
-	std::string get_courseTitleFull( );
+	std::string get_courseTitleFull( ) const;
 	void set_detailsFinal(Event final);
-	Event get_detailsFinal( );
+	Event get_detailsFinal( ) const;
 	void set_lectures(std::vector<Lecture> lectures);
-	std::vector<Lecture> get_lectures( );
+	std::vector<Lecture> get_lectures( ) const;
 	// needed: some member functions to handle 'lectures' vector
 
 private:

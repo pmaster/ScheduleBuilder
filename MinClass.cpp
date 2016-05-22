@@ -54,7 +54,7 @@ void MinClass::set_courseTitle(std::string courseTitle) {
 	this->courseTitle = courseTitle;
 }
 
-std::string MinClass::get_courseTitle( ) {
+std::string MinClass::get_courseTitle( ) const {
 	return courseTitle;
 }
 
@@ -62,7 +62,7 @@ void MinClass::set_courseTitleFull(std::string courseTitleFull) {
 	this->courseTitleFull = courseTitleFull;
 }
 
-std::string MinClass::get_courseTitleFull( ) {
+std::string MinClass::get_courseTitleFull( ) const {
 	return courseTitleFull;
 }
 
@@ -70,7 +70,7 @@ void MinClass::set_detailsFinal(Event final) {
 	this->final = final;
 }
 
-MinClass::Event MinClass::get_detailsFinal( ) {
+MinClass::Event MinClass::get_detailsFinal( ) const {
 	return final;
 }
 
@@ -78,6 +78,6 @@ void MinClass::set_lectures(std::vector<Lecture> lectures) {
 	this->lectures = lectures;
 }
 
-std::vector<MinClass::Lecture> MinClass::get_lectures( ) {
+std::vector<MinClass::Lecture> MinClass::get_lectures( ) const {
 	return lectures;
 }
