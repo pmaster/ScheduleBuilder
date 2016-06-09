@@ -151,6 +151,20 @@ void MinClass::set_lectures(std::vector<Lecture> lectures) {
 	this->lectures = lectures;
 }
 
+std::istream& operator>>(std::istream& is, MinClass& obj) {
+    std::string courseID, courseTitle = "", courseTitleFull = "";
+    std::getline(is, courseID);
+    std::size_t separate = courseID.find(" -- ");
+    if (separate != std::string::npos) {
+        courseTitle = courseID.substr(separate + 4);
+        courseID = courseID.substr(0, separate);
+    }
+
+
+
+    return is;
+}
+
 std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
     std::vector<Lecture> lectures = obj.get_lectures( );
 
