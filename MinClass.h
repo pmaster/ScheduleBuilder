@@ -68,8 +68,8 @@ public:
 	void set_courseTitle(std::string courseTitle);
 	std::string get_courseTitleFull( ) const;
 	void set_courseTitleFull(std::string courseTitleFull);
-	Event get_detailsFinal( ) const;
-	void set_detailsFinal(Event final);
+	//Event get_detailsFinal( ) const;
+	//void set_detailsFinal(Event final);
 	std::vector<Lecture> get_lectures( ) const;
 	void set_lectures(std::vector<Lecture> lectures);
 	// needed: some member functions to handle 'lectures' vector
@@ -77,7 +77,6 @@ public:
 private:
 	std::string courseID, courseTitle, courseTitleFull; //ex.: CMPSC 56, ADV APP PROGRAM, Advanced Applications Programming
 	std::vector<Lecture> lectures;
-	//Event final;
 };
 
 std::string DOTW_to_day_char(DayOfTheWeek d);

@@ -134,12 +134,12 @@ void MinClass::set_courseTitleFull(std::string courseTitleFull) {
 }
 
 /*
-void MinClass::set_detailsFinal(Event final) {
-	this->final = final;
+Event MinClass::get_detailsFinal( ) const {
+	return final;
 }
 
-MinClass::Event MinClass::get_detailsFinal( ) const {
-	return final;
+void MinClass::set_detailsFinal(Event final) {
+
 }
 */
 
@@ -162,7 +162,7 @@ std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
         os << obj.get_courseTitleFull( ) << std::endl;
     os << std::endl;
     for (unsigned i = 0; i < lectures.size( ); i++)
-        os << lectures[i] << std::endl;
+        os << lectures[i];
 
     // print details about final here
 
@@ -171,8 +171,11 @@ std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
 
 std::ostream& operator<<(std::ostream& os, const Lecture& obj) {
     os << obj.get_lecture( ) << std::endl;
-    for (unsigned i = 0; i < obj.get_sections( ).size( ); i++)
-        os << "     " << obj.get_sections( )[i] << std::endl;
+    for (unsigned i = 0; i < obj.get_sections( ).size( ); i++) {
+        for (int j = 7 - (obj.get_sections( )[i].get_days( ).size( )>2?obj.get_sections( )[i].get_days( ).size( ):2); j > 0; j--)
+            os << " ";
+        os << obj.get_sections( )[i] << std::endl;
+    }
     os << std::endl;
     return os;
 }
@@ -180,11 +183,14 @@ std::ostream& operator<<(std::ostream& os, const Lecture& obj) {
 std::ostream& operator<<(std::ostream& os, const Event& obj) {
     if (obj.get_days( ).size( )) {
         if (obj.get_days( )[0] == ONLINE)
-            os << "ONLINE";
-        else
+            os << "ONLINE" << " ";
+        else {
             for (unsigned i = 0; i < obj.get_days( ).size( ); i++)
                 os << DOTW_to_day_char(obj.get_days( )[i]);
-            os << "  " << military_to_12hour(obj.get_startTime( )) << " - " << military_to_12hour(obj.get_endTime( ));
+            for (int i = 4 - (obj.get_days( ).size( )>2?2:obj.get_days( ).size( )); i > 0; i--)
+                os << " ";
+        }
+            os << military_to_12hour(obj.get_startTime( )) << " - " << military_to_12hour(obj.get_endTime( ));
     }
     return os;
 }

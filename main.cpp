@@ -13,9 +13,9 @@ int main()
     lectures1.push_back(Lecture(Event(vecDays(T, R), 1230, 1345), sections1));
 
     vector<Event> sections2;
-    sections2.push_back(Event(vecDays(T), 900, 950));
+    sections2.push_back(Event(vecDays(R), 900, 950));
     sections2.push_back(Event(vecDays(T), 1000, 1050));
-    sections2.push_back(Event(vecDays(F), 1400, 1450));
+    sections2.push_back(Event(vecDays(T), 1400, 1450));
     lectures1.push_back(Lecture(Event(vecDays(M, W), 1100, 1215), sections2));
 
     Event final1(1209, vecDays(W), 1200, 1500);
