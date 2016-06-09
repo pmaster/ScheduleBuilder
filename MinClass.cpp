@@ -187,7 +187,7 @@ std::ostream& operator<<(std::ostream& os, const Event& obj) {
         else {
             for (unsigned i = 0; i < obj.get_days( ).size( ); i++)
                 os << DOTW_to_day_char(obj.get_days( )[i]);
-            for (int i = 4 - (obj.get_days( ).size( )>2?2:obj.get_days( ).size( )); i > 0; i--)
+            for (int i = 4 - (obj.get_days( ).size( )>=2?2:1); i > 0; i--)
                 os << " ";
         }
             os << military_to_12hour(obj.get_startTime( )) << " - " << military_to_12hour(obj.get_endTime( ));
