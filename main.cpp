@@ -4,12 +4,19 @@
 
 using namespace std;
 
-int main()
-{
+// make sure input file has a new line character (or several) at the end of the file
+
+int main( )
+{   ifstream in;
     ofstream out;
+    in.open("testif.txt");
     out.open("outputFile.txt");
 
-    vector<Event> sections1;
+    MinClass CS8("CMPSC 8");
+    in >> CS8;
+    std::cout << CS8;
+
+    /*vector<Event> sections1;
     sections1.push_back(Event(vecDays(R), 1600, 1650));
     sections1.push_back(Event(vecDays(R), 1700, 1750));
     sections1.push_back(Event(vecDays(R), 1800, 1850));
@@ -30,7 +37,8 @@ int main()
 
     cout << cs56;
 
-    out << cs56;
+    out << cs56;*/
+    in.close( );
     out.close( );
 
     return 0;
