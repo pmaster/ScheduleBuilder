@@ -16,6 +16,14 @@ int main( )
     in >> CS8;
     std::cout << CS8;
 
+    MinClass CS56("CMPSC 56");
+    in >> CS56;
+    std::cout << CS56;
+
+    MinClass CS130a("CMPSC 130a");
+    in >> CS130a;
+    std::cout << CS130a;
+
     /*vector<Event> sections1;
     sections1.push_back(Event(vecDays(R), 1600, 1650));
     sections1.push_back(Event(vecDays(R), 1700, 1750));

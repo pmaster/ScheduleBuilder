@@ -172,7 +172,6 @@ std::istream& operator>>(std::istream& is, MinClass& obj) {
         lectures.push_back(lecture);
         n = is.get( );
     }
-    is.putback(n);
 
     obj.set_courseID(courseID);
     obj.set_courseTitle(courseTitle);
