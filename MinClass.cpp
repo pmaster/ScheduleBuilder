@@ -325,6 +325,10 @@ std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
 
 Schedule::Schedule(std::vector<std::pair<std::string,Event> > data) : data(data) { }
 
+int Schedule::size( ) const {
+    return data.size( );
+}
+
 std::vector<std::pair<std::string,Event> > Schedule::get_data( ) const {
     return data;
 }
@@ -420,10 +424,48 @@ bool ScheduleSet::removeClass(MinClass oldClass) {
     return false;
 }
 
-std::vector<Schedule> ScheduleSet::generateSchedules( ) const {
-    std::vector<Schedule> schedules;
 
+
+
+std::vector<Schedule> ScheduleSet::generateSchedules( ) const {
+    Schedule schedule;
+    std::vector<Schedule> schedules;
+    for (int i = 0; i < reservedSpots.size( ); i++) {
+        if (isUnconflicted(schedule.get_data( ))
+    schedGenHelper(schedules, 0)
     return schedules;
+}
+
+void ScheduleSet::schedGenHelper(std::vector<Schedule> &schedules, Schedule schedule) const {
+    if (schedule.size( ) == reservedSpots.size( ) + classes.size( ))
+        schedules.push_back(schedule);
+    else {
+
+
+
+    }
+}
+
+bool ScheduleSet::isUnconflicted(const vector<Event> &events, const Event &event) const {
+    for (int i = 0; i < events.size( ); i++) {
+        // test if there is any time overlap between event and events[i]
+        if (event.get_startTime( ) <= events[i].get_startTime) {
+            if (event.get_endTime( ) > events[i].get_startTime)
+                // test if there are any common days between event and events[i]
+                for (int j = 0; j < event.get_days( ).size( ); j++)
+                    for (int k = 0; k < events[i].get_days( ).size( )
+                        if (event.get_days( )[j] == events[i].get_days( )[k])
+                            return false; // overlap between event and events[i]
+        }
+        // test if there is any time overlap between event and events[i]
+        else if (event.get_startTime( ) < events[i].get_endTime)
+            // test if there are any common days between event and events[i]
+            for (int j = 0; j < event.get_days( ).size( ); j++)
+                for (int k = 0; k < events[i].get_days( ).size( )
+                    if (event.get_days( )[j] == events[i].get_days( )[k])
+                        return false; // overlap between event and events[i]
+    }
+    return true; // no overlap between event and any of the events in events
 }
 
 bool operator==(const ScheduleSet &lhs, const ScheduleSet &rhs) {

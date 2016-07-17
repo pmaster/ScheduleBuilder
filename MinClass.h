@@ -97,12 +97,13 @@ bool operator==(const MinClass &lhs, const MinClass &rhs);
 std::istream& operator>>(std::istream& os, MinClass& obj);
 std::ostream& operator<<(std::ostream& os, const MinClass& obj);
 
-class Schedule
+class Schedule //REWRITE TO HAVE SEPARATE STRING/EVENT VECTORS
 {
 public:
     Schedule(std::vector<std::pair<std::string,Event> > data =
                 std::vector<std::pair<std::string,Event> >( ));
 
+    int size( ) const;
     std::vector<std::pair<std::string,Event> > get_data( ) const;
     void set_data(std::vector<std::pair<std::string,Event> > newData);
     void add(std::string text, Event event);
@@ -112,6 +113,7 @@ public:
 private:
     std::vector<std::pair<std::string,Event> > data;
 };
+bool operator==(const Schedule &lhs, const Schedule &rhs);
 
 class ScheduleSet
 {
@@ -140,7 +142,11 @@ private:
     // bool breaks;
     std::vector<Event> reservedSpots;
     std::vector<MinClass> classes;
+
+    void schedGenHelper(std::vector<Schedule> &schedules, int counter) const;
+    bool isUnconflicted(std::vector<Schedule> &schedules, const Event &event) const;
 };
+bool operator==(const ScheduleSet &lhs, const ScheduleSet &rhs);
 
 std::string DOTW_to_day_char(DayOfTheWeek d);
 std::string military_to_12hour(int time);
