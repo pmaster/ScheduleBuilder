@@ -102,16 +102,24 @@ class Schedule //REWRITE TO HAVE SEPARATE STRING/EVENT VECTORS
 public:
     Schedule(std::vector<std::pair<std::string,Event> > data =
                 std::vector<std::pair<std::string,Event> >( ));
+    Schedule(std::vector<std::pair<Event,std::string> > data)
 
     int size( ) const;
-    std::vector<std::pair<std::string,Event> > get_data( ) const;
     void set_data(std::vector<std::pair<std::string,Event> > newData);
+    void set_data(std::vector<std::pair<Event,std::string> > newData);
+    std::vector<Event> Schedule::get_eventData( ) const;
+    std::vector<std::string> Schedule::get_strData( ) const;
     void add(std::string text, Event event);
+    void add(Event event, std::string text);
     void add(std::pair<std::string,Event> event);
+    void add(std::pair<Event,std::string> event);
     bool remove(Event event);
+
     // void display( );
 private:
-    std::vector<std::pair<std::string,Event> > data;
+    // std::vector<std::pair<std::string,Event> > data;
+    std::vector<Event> eventData;
+    std::vector<std::string> strData;
 };
 bool operator==(const Schedule &lhs, const Schedule &rhs);
 

@@ -323,32 +323,73 @@ std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
     return os;
 }
 
-Schedule::Schedule(std::vector<std::pair<std::string,Event> > data) : data(data) { }
-
-int Schedule::size( ) const {
-    return data.size( );
+Schedule::Schedule(std::vector<std::pair<std::string,Event> > data) :
+       eventData(std::vector<Event>( )), strData(std::vector<std::string>( )) {
+    for (int i = 0; i < data; i++) {
+        strData.push_back(data[i].first);
+        eventData.push_back(data[i].second);
+    }
 }
 
-std::vector<std::pair<std::string,Event> > Schedule::get_data( ) const {
-    return data;
+Schedule::Schedule(std::vector<std::pair<Event,std::string> > data) :
+       eventData(std::vector<Event>( )), strData(std::vector<std::string>( )) {
+    for (int i = 0; i < data; i++) {
+        eventData.push_back(data[i].first);
+        strData.push_back(data[i].second);
+    }
+}
+
+int Schedule::size( ) const {
+    return eventData.size( );
+}
+
+std::vector<Event> Schedule::get_eventData( ) const {
+    return eventData;
+}
+
+std::vector<std::string> Schedule::get_strData( ) const {
+    return strData;
 }
 
 void Schedule::set_data(std::vector<std::pair<std::string,Event> > newData) {
-    data = newData;
+    for (int i = 0; i < newData.size( ); i++) {
+        strData.push_back(newData[i].first);
+        eventData.push_back(newData[i].second);
+    }
+}
+
+void Schedule::set_data(std::vector<std::pair<Event,std::string> > newData) {
+    for (int i = 0; i < newData.size( ); i++) {
+        eventData.push_back(newData[i].first);
+        strData.push_back(newData[i].second);
+    }
 }
 
 void Schedule::add(std::string text, Event event) {
-    this->add(std::pair<std::string,Event>(text,event));
+    strData.push_back(text);
+    eventData.push_back(event);
+}
+
+void Schedule::add(Event event, std::string text) {
+    strData.push_back(text);
+    eventData.push_back(event);
 }
 
 void Schedule::add(std::pair<std::string,Event> event) {
-    data.push_back(event);
+    strData.push_back(event.first);
+    eventData.push_back(event.second);
+}
+
+void Schedule::add(std::pair<Event,std::string> event) {
+    eventData.push_back(event.first);
+    strData.push_back(event.second);
 }
 
 bool Schedule::remove(Event event) {
-    for (int i = 0; i < data.size( ); i++)
-        if (event == data[i].second) {
-            data.erase(data.begin( ) + i);
+    for (int i = 0; i < eventData.size( ); i++)
+        if (event == eventData[i]) {
+            eventData.erase(eventData.begin( ) + i);
+            strData.erase(strData.begin( ) + i);
             return true;
         }
     return false;
@@ -357,7 +398,8 @@ bool Schedule::remove(Event event) {
 bool operator==(const Schedule &lhs, const Schedule &rhs) {
     if (&lhs == &rhs)
         return true;
-    return lhs.get_data( ) == rhs.get_data( );
+    return lhs.get_eventData( ) == rhs.get_eventData( ) &&
+            lhs.get_strData( ) == rhs.get_strData( );
 }
 
 ScheduleSet::ScheduleSet(std::vector<MinClass> classes,
