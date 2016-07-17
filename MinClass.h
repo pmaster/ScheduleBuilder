@@ -44,6 +44,8 @@ private:
     std::vector<int> dates; //format MMDD
 };
 bool operator==(const Event &lhs, const Event &rhs);
+std::istream& operator>>(std::istream& os, Event& obj);
+std::ostream& operator<<(std::ostream& os, const Event& obj);
 
 class Lecture
 {
@@ -63,6 +65,8 @@ private:
     std::vector<Event> sections;
 };
 bool operator==(const Lecture &lhs, const Lecture &rhs);
+std::istream& operator>>(std::istream& os, Lecture& obj);
+std::ostream& operator<<(std::ostream& os, const Lecture& obj);
 
 class MinClass
 {
@@ -90,6 +94,8 @@ private:
 	std::vector<Lecture> lectures;
 };
 bool operator==(const MinClass &lhs, const MinClass &rhs);
+std::istream& operator>>(std::istream& os, MinClass& obj);
+std::ostream& operator<<(std::ostream& os, const MinClass& obj);
 
 class Schedule
 {
@@ -134,18 +140,11 @@ private:
     // bool breaks;
     std::vector<Event> reservedSpots;
     std::vector<MinClass> classes;
-
 };
 
 std::string DOTW_to_day_char(DayOfTheWeek d);
 std::string military_to_12hour(int time);
 int twelve_to_twentyfour(std::string);
-std::istream& operator>>(std::istream& os, MinClass& obj);
-std::ostream& operator<<(std::ostream& os, const MinClass& obj);
-std::istream& operator>>(std::istream& os, Lecture& obj);
-std::ostream& operator<<(std::ostream& os, const Lecture& obj);
-std::istream& operator>>(std::istream& os, Event& obj);
-std::ostream& operator<<(std::ostream& os, const Event& obj);
 std::vector<DayOfTheWeek> vecDays(DayOfTheWeek a = invalid, DayOfTheWeek b = invalid,
                                   DayOfTheWeek c = invalid, DayOfTheWeek d = invalid,
                                   DayOfTheWeek e = invalid, DayOfTheWeek f = invalid,

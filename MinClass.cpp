@@ -54,6 +54,75 @@ bool operator==(const Event &lhs, const Event &rhs) {
             (lhs.get_date( ) == rhs.get_date( ));
 }
 
+std::istream& operator>>(std::istream& is, Event& obj) {
+    std::vector<DayOfTheWeek> days;
+    std::string next;
+    int startTime, endTime;
+    getline(is, next);
+    std::string daysS = next.substr(0, next.length( ) - 17), timesS = next.substr(next.length( ) - 17);
+    if (daysS == "ONLINE")
+        obj.set_days(vecDays(online));
+    else {
+        for (unsigned i = 0; i < daysS.length( ); i++) {
+            if (daysS[i] == ' ') ;
+            else if (daysS[i] == 'M')
+                days.push_back(M);
+            else if (daysS[i] == 'T')
+                days.push_back(T);
+            else if (daysS[i] == 'W')
+                days.push_back(W);
+            else if (daysS[i] == 'R')
+                days.push_back(R);
+            else if (daysS[i] == 'F')
+                days.push_back(F);
+            else if (daysS[i] == 'S')
+                days.push_back(S);
+            else if (daysS[i] == 'N')
+                days.push_back(N);
+        }
+        obj.set_days(days);
+    }
+    std::string startTimeS = timesS.substr(0, 2) + timesS.substr(3, 2),
+                endTimeS = timesS.substr(10, 2) + timesS.substr(13, 2);
+    startTime = atoi(startTimeS.c_str( ));
+    endTime = atoi(endTimeS.c_str( ));
+    if (startTime >= 1200) {
+        if (timesS[5] == 'A')
+            startTime -= 1200;
+        else if (timesS[5] == 'P') ;
+    }
+    else if (timesS[5] == 'P')
+        startTime += 1200;
+    obj.set_startTime(startTime);
+    if (endTime >= 1200) {
+        if (timesS[5] == 'A')
+            endTime -= 1200;
+        else if (timesS[5] == 'P') ;
+    }
+    else if (timesS[5] == 'P')
+        endTime += 1200;
+
+    obj.set_startTime(startTime);
+    obj.set_endTime(endTime);
+
+    return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const Event& obj) {
+    if (obj.get_days( ).size( )) {
+        if (obj.get_days( )[0] == ONLINE)
+            os << "ONLINE" << " ";
+        else {
+            for (unsigned i = 0; i < obj.get_days( ).size( ); i++)
+                os << DOTW_to_day_char(obj.get_days( )[i]);
+            for (int i = 4 - (obj.get_days( ).size( )>=2?2:1); i > 0; i--)
+                os << " ";
+        }
+            os << military_to_12hour(obj.get_startTime( )) << " - " << military_to_12hour(obj.get_endTime( ));
+    }
+    return os;
+}
+
 std::vector<DayOfTheWeek> days;
     int start, end; // format: military time
     std::vector<int> dates; //format MMDD
@@ -89,6 +158,35 @@ bool operator==(const Lecture &lhs, const Lecture &rhs) {
     return (lhs.get_lecture( ) == rhs.get_lecture( )) &&
             (lhs.get_sections( ) == rhs.get_sections( )) &&
             (lhs.get_final( ) == rhs.get_final( ));
+}
+
+std::istream& operator>>(std::istream& is, Lecture& obj) {
+    Event lecture, section;
+    std::vector<Event> sections;
+    is >> lecture;
+    char n = is.get( );
+    while (n != '\n') {
+        is.putback(n);
+        is >> section;
+        sections.push_back(section);
+        n = is.get( );
+    }
+    //is.putback(n);
+
+    obj.set_sections(sections);
+    obj.set_lecture(lecture);
+    return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const Lecture& obj) {
+    os << obj.get_lecture( ) << std::endl;
+    for (unsigned i = 0; i < obj.get_sections( ).size( ); i++) {
+        for (int j = 7 - (obj.get_sections( )[i].get_days( ).size( )>2?obj.get_sections( )[i].get_days( ).size( ):2); j > 0; j--)
+            os << " ";
+        os << obj.get_sections( )[i] << std::endl;
+    }
+    os << std::endl;
+    return os;
 }
 
 MinClass::MinClass(std::string courseID) : courseID(courseID) {
@@ -176,6 +274,53 @@ bool operator==(const MinClass &lhs, const MinClass &rhs) {
             (lhs.get_lectures( ) == rhs.get_lectures( )) &&
             (lhs.get_courseTitle( ) == rhs.get_courseTitle( )) &&
             (lhs.get_courseTitleFull( ) == rhs.get_courseTitleFull( ));
+}
+
+std::istream& operator>>(std::istream& is, MinClass& obj) {
+    std::string courseID, courseTitle = "", courseTitleFull, next;
+    getline(is, next);
+    std::size_t separate = next.find(" -- ");
+    if (separate != std::string::npos) {
+        courseTitle = next.substr(separate + 4);
+        courseID = next.substr(0, separate);
+    }
+    getline(is, courseTitleFull);
+    if (!(courseTitleFull == ""))
+        getline(is, next);
+
+    std::vector<Lecture> lectures;
+    Lecture lecture;
+    char n = is.get( );
+    while (n != '\n') {
+        is.putback(n);
+        is >> lecture;
+        lectures.push_back(lecture);
+        n = is.get( );
+    }
+
+    obj.set_courseID(courseID);
+    obj.set_courseTitle(courseTitle);
+    obj.set_courseTitleFull(courseTitleFull);
+    obj.set_lectures(lectures);
+    return is;
+}
+
+std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
+    std::vector<Lecture> lectures = obj.get_lectures( );
+
+    os << std::endl << obj.get_courseID( );
+    if (obj.get_courseTitle( ) != "")
+        os << " -- " << obj.get_courseTitle( );
+    os << std::endl;
+    if (obj.get_courseTitleFull( ) != "")
+        os << obj.get_courseTitleFull( ) << std::endl;
+    os << std::endl;
+    for (unsigned i = 0; i < lectures.size( ); i++)
+        os << lectures[i];
+
+    // print details about final here
+
+    return os;
 }
 
 Schedule::Schedule(std::vector<std::pair<std::string,Event> > data) : data(data) { }
@@ -281,149 +426,11 @@ std::vector<Schedule> ScheduleSet::generateSchedules( ) const {
     return schedules;
 }
 
-std::istream& operator>>(std::istream& is, MinClass& obj) {
-    std::string courseID, courseTitle = "", courseTitleFull, next;
-    getline(is, next);
-    std::size_t separate = next.find(" -- ");
-    if (separate != std::string::npos) {
-        courseTitle = next.substr(separate + 4);
-        courseID = next.substr(0, separate);
-    }
-    getline(is, courseTitleFull);
-    if (!(courseTitleFull == ""))
-        getline(is, next);
-
-    std::vector<Lecture> lectures;
-    Lecture lecture;
-    char n = is.get( );
-    while (n != '\n') {
-        is.putback(n);
-        is >> lecture;
-        lectures.push_back(lecture);
-        n = is.get( );
-    }
-
-    obj.set_courseID(courseID);
-    obj.set_courseTitle(courseTitle);
-    obj.set_courseTitleFull(courseTitleFull);
-    obj.set_lectures(lectures);
-    return is;
-}
-
-std::istream& operator>>(std::istream& is, Lecture& obj) {
-    Event lecture, section;
-    std::vector<Event> sections;
-    is >> lecture;
-    char n = is.get( );
-    while (n != '\n') {
-        is.putback(n);
-        is >> section;
-        sections.push_back(section);
-        n = is.get( );
-    }
-    //is.putback(n);
-
-    obj.set_sections(sections);
-    obj.set_lecture(lecture);
-    return is;
-}
-
-std::istream& operator>>(std::istream& is, Event& obj) {
-    std::vector<DayOfTheWeek> days;
-    std::string next;
-    int startTime, endTime;
-    getline(is, next);
-    std::string daysS = next.substr(0, next.length( ) - 17), timesS = next.substr(next.length( ) - 17);
-    if (daysS == "ONLINE")
-        obj.set_days(vecDays(online));
-    else {
-        for (unsigned i = 0; i < daysS.length( ); i++) {
-            if (daysS[i] == ' ') ;
-            else if (daysS[i] == 'M')
-                days.push_back(M);
-            else if (daysS[i] == 'T')
-                days.push_back(T);
-            else if (daysS[i] == 'W')
-                days.push_back(W);
-            else if (daysS[i] == 'R')
-                days.push_back(R);
-            else if (daysS[i] == 'F')
-                days.push_back(F);
-            else if (daysS[i] == 'S')
-                days.push_back(S);
-            else if (daysS[i] == 'N')
-                days.push_back(N);
-        }
-        obj.set_days(days);
-    }
-    std::string startTimeS = timesS.substr(0, 2) + timesS.substr(3, 2),
-                endTimeS = timesS.substr(10, 2) + timesS.substr(13, 2);
-    startTime = atoi(startTimeS.c_str( ));
-    endTime = atoi(endTimeS.c_str( ));
-    if (startTime >= 1200) {
-        if (timesS[5] == 'A')
-            startTime -= 1200;
-        else if (timesS[5] == 'P') ;
-    }
-    else if (timesS[5] == 'P')
-        startTime += 1200;
-    obj.set_startTime(startTime);
-    if (endTime >= 1200) {
-        if (timesS[5] == 'A')
-            endTime -= 1200;
-        else if (timesS[5] == 'P') ;
-    }
-    else if (timesS[5] == 'P')
-        endTime += 1200;
-
-    obj.set_startTime(startTime);
-    obj.set_endTime(endTime);
-
-    return is;
-}
-
-std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
-    std::vector<Lecture> lectures = obj.get_lectures( );
-
-    os << std::endl << obj.get_courseID( );
-    if (obj.get_courseTitle( ) != "")
-        os << " -- " << obj.get_courseTitle( );
-    os << std::endl;
-    if (obj.get_courseTitleFull( ) != "")
-        os << obj.get_courseTitleFull( ) << std::endl;
-    os << std::endl;
-    for (unsigned i = 0; i < lectures.size( ); i++)
-        os << lectures[i];
-
-    // print details about final here
-
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const Lecture& obj) {
-    os << obj.get_lecture( ) << std::endl;
-    for (unsigned i = 0; i < obj.get_sections( ).size( ); i++) {
-        for (int j = 7 - (obj.get_sections( )[i].get_days( ).size( )>2?obj.get_sections( )[i].get_days( ).size( ):2); j > 0; j--)
-            os << " ";
-        os << obj.get_sections( )[i] << std::endl;
-    }
-    os << std::endl;
-    return os;
-}
-
-std::ostream& operator<<(std::ostream& os, const Event& obj) {
-    if (obj.get_days( ).size( )) {
-        if (obj.get_days( )[0] == ONLINE)
-            os << "ONLINE" << " ";
-        else {
-            for (unsigned i = 0; i < obj.get_days( ).size( ); i++)
-                os << DOTW_to_day_char(obj.get_days( )[i]);
-            for (int i = 4 - (obj.get_days( ).size( )>=2?2:1); i > 0; i--)
-                os << " ";
-        }
-            os << military_to_12hour(obj.get_startTime( )) << " - " << military_to_12hour(obj.get_endTime( ));
-    }
-    return os;
+bool operator==(const ScheduleSet &lhs, const ScheduleSet &rhs) {
+    return (lhs.get_classes( ) == rhs.get_classes( )) &&
+            (lhs.get_reservedSpots( ) == rhs.get_reservedSpots( )) &&
+            (lhs.get_earliest( ) == rhs.get_earliest( )) &&
+            (lhs.get_latest( ) == rhs.get_latest( ));
 }
 
 std::vector<DayOfTheWeek> vecDays(DayOfTheWeek a, DayOfTheWeek b,
