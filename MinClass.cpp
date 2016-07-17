@@ -7,8 +7,11 @@ Event::Event(std::vector<DayOfTheWeek> days, int start,
             int end, std::vector<int> dates) : days(days),
             start(start), end(end), dates(dates) { }
 
-Event::Event(int date, std::vector<DayOfTheWeek> days, int start, int end) : days(days),
-            start(start), end(end), dates(std::vector<int>( )) { dates.push_back(date); }
+Event::Event(int date, std::vector<DayOfTheWeek> days,
+              int start, int end) : days(days), start(start),
+              end(end), dates(std::vector<int>( )) {
+    dates.push_back(date);
+}
 
 int Event::get_startTime( ) const {
     return start;
@@ -43,6 +46,18 @@ std::vector<DayOfTheWeek> Event::get_days( ) const {
 void Event::set_days(std::vector<DayOfTheWeek> days) {
         this->days = days;
 }
+
+bool operator==(const Event &lhs, const Event &rhs) {
+    return (lhs.get_startTime( ) == rhs.get_endTime( )) &&
+            (lhs.get_days( ) == rhs.get_days( )) &&
+            (lhs.get_endTime( ) == rhs.get_endTime( )) &&
+            (lhs.get_date( ) == rhs.get_date( ));
+}
+
+std::vector<DayOfTheWeek> days;
+    int start, end; // format: military time
+    std::vector<int> dates; //format MMDD
+
 Lecture::Lecture(Event lecture, std::vector<Event> sections, Event final)
             : lecture(lecture), final(final), sections(sections) { }
 
@@ -70,6 +85,11 @@ void Lecture::set_sections(std::vector<Event> sections) {
     this->sections = sections;
 }
 
+bool operator==(const Lecture &lhs, const Lecture &rhs) {
+    return (lhs.get_lecture( ) == rhs.get_lecture( )) &&
+            (lhs.get_sections( ) == rhs.get_sections( )) &&
+            (lhs.get_final( ) == rhs.get_final( ));
+}
 
 MinClass::MinClass(std::string courseID) : courseID(courseID) {
 	courseTitle = "";
@@ -149,6 +169,116 @@ std::vector<Lecture> MinClass::get_lectures( ) const {
 
 void MinClass::set_lectures(std::vector<Lecture> lectures) {
 	this->lectures = lectures;
+}
+
+bool operator==(const MinClass &lhs, const MinClass &rhs) {
+    return (lhs.get_courseID( ) == rhs.get_courseID( )) &&
+            (lhs.get_lectures( ) == rhs.get_lectures( )) &&
+            (lhs.get_courseTitle( ) == rhs.get_courseTitle( )) &&
+            (lhs.get_courseTitleFull( ) == rhs.get_courseTitleFull( ));
+}
+
+Schedule::Schedule(std::vector<std::pair<std::string,Event> > data) : data(data) { }
+
+std::vector<std::pair<std::string,Event> > Schedule::get_data( ) const {
+    return data;
+}
+
+void Schedule::set_data(std::vector<std::pair<std::string,Event> > newData) {
+    data = newData;
+}
+
+void Schedule::add(std::string text, Event event) {
+    this->add(std::pair<std::string,Event>(text,event));
+}
+
+void Schedule::add(std::pair<std::string,Event> event) {
+    data.push_back(event);
+}
+
+bool Schedule::remove(Event event) {
+    for (int i = 0; i < data.size( ); i++)
+        if (event == data[i].second) {
+            data.erase(data.begin( ) + i);
+            return true;
+        }
+    return false;
+}
+
+bool operator==(const Schedule &lhs, const Schedule &rhs) {
+    if (&lhs == &rhs)
+        return true;
+    return lhs.get_data( ) == rhs.get_data( );
+}
+
+ScheduleSet::ScheduleSet(std::vector<MinClass> classes,
+                         std::vector<Event> reservedSpots) :
+                         earliest(0), latest(2400),
+                         reservedSpots(reservedSpots),
+                         classes(classes) { }
+
+int ScheduleSet::get_earliest( ) const {
+    return earliest;
+}
+
+void ScheduleSet::set_earliest(int earliestTime) {
+    earliest = earliestTime;
+}
+
+int ScheduleSet::get_latest( ) const {
+    return latest;
+}
+
+void ScheduleSet::set_latest(int latestTime) {
+    latest = latestTime;
+}
+
+std::vector<Event> ScheduleSet::get_reservedSpots( ) const {
+    return reservedSpots;
+}
+
+void ScheduleSet::set_reservedSpots(std::vector<Event> spaces) {
+    reservedSpots = spaces;
+}
+
+void ScheduleSet::addSpace(Event newSpace) {
+    reservedSpots.push_back(newSpace);
+}
+
+bool ScheduleSet::removeSpace(Event oldSpace) {
+    for (int i = 0; i < reservedSpots.size( ); i++)
+        if (oldSpace == reservedSpots[i]) {
+            reservedSpots.erase(reservedSpots.begin( ) + i);
+            return true;
+        }
+    return false;
+}
+
+std::vector<MinClass> ScheduleSet::get_classes( ) const {
+    return classes;
+}
+
+void ScheduleSet::set_classes(std::vector<MinClass> newClasses) {
+    classes = newClasses;
+}
+
+void ScheduleSet::addClass(MinClass newClass) {
+    classes.push_back(newClass);
+}
+
+bool ScheduleSet::removeClass(MinClass oldClass) {
+    for (int i = 0; i < reservedSpots.size( ); i++)
+        if (oldClass == classes[i]) {
+            classes.erase(classes.begin( ) + i);
+            return true;
+        }
+    return false;
+}
+
+std::vector<Schedule> ScheduleSet::generateSchedules( ) const {
+    std::vector<Schedule> schedules;
+
+    return schedules;
 }
 
 std::istream& operator>>(std::istream& is, MinClass& obj) {

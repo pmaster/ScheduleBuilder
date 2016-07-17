@@ -1,6 +1,15 @@
 // MinClass.h
 // Peter Master, 5/21
 
+// some assumptions:
+// classes may be fully online or have one or more lectures,
+// if the classes have lectures, then each lecture will
+// occur at the same time on one or more days. Each lecture
+// of a class will have its own list of sections (with the
+// expectation that students will only enroll in only one)
+// and each section will meet at the same time for every day
+// that it meets
+
 #ifndef MINCLASS_H
 #define MINCLASS_H
 
@@ -34,6 +43,7 @@ private:
     int start, end; // format: military time
     std::vector<int> dates; //format MMDD
 };
+bool operator==(const Event &lhs, const Event &rhs);
 
 class Lecture
 {
@@ -52,6 +62,7 @@ private:
     Event lecture, final;
     std::vector<Event> sections;
 };
+bool operator==(const Lecture &lhs, const Lecture &rhs);
 
 class MinClass
 {
@@ -77,6 +88,53 @@ public:
 private:
 	std::string courseID, courseTitle, courseTitleFull; //ex.: CMPSC 56, ADV APP PROGRAM, Advanced Applications Programming
 	std::vector<Lecture> lectures;
+};
+bool operator==(const MinClass &lhs, const MinClass &rhs);
+
+class Schedule
+{
+public:
+    Schedule(std::vector<std::pair<std::string,Event> > data =
+                std::vector<std::pair<std::string,Event> >( ));
+
+    std::vector<std::pair<std::string,Event> > get_data( ) const;
+    void set_data(std::vector<std::pair<std::string,Event> > newData);
+    void add(std::string text, Event event);
+    void add(std::pair<std::string,Event> event);
+    bool remove(Event event);
+    // void display( );
+private:
+    std::vector<std::pair<std::string,Event> > data;
+};
+
+class ScheduleSet
+{
+public:
+    ScheduleSet(std::vector<MinClass> classes = std::vector<MinClass>( ),
+                std::vector<Event> reservedSpots = std::vector<Event>( ));
+
+    int get_earliest( ) const;
+    void set_earliest(int earliestTime);
+    int get_latest( ) const;
+    void set_latest(int latestTime);
+
+    std::vector<Event> get_reservedSpots( ) const;
+    void set_reservedSpots(std::vector<Event> spaces);
+    void addSpace(Event newSpace);
+    bool removeSpace(Event oldSpace);
+    std::vector<MinClass> get_classes( ) const;
+    void set_classes(std::vector<MinClass> newClasses);
+    void addClass(MinClass newClass);
+    bool removeClass(MinClass oldClass);
+
+    std::vector<Schedule> generateSchedules( ) const;
+
+private:
+    int earliest, latest;
+    // bool breaks;
+    std::vector<Event> reservedSpots;
+    std::vector<MinClass> classes;
+
 };
 
 std::string DOTW_to_day_char(DayOfTheWeek d);
