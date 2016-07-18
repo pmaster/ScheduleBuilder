@@ -493,13 +493,10 @@ std::vector<Schedule> ScheduleSet::generateSchedules( ) const {
 // ASSUMES THAT SECTIONS ARE REQUIRED IF AND ONLY IF THE LECTURE HAS ANY SECTIONS
 
 void ScheduleSet::generatorHelper(std::vector<Schedule>& schedules, Schedule schedule, int counter) const {
-    std::cout << "\nNIGGA" << schedules.size( );
     if (counter == classes.size( )) {
         schedules.push_back(schedule);
-        std::cout << "YOLO";
     }
     else {
-        std::cout << "hi" << counter;
         for (int i = classes[counter].get_lectures( ).size( ) - 1; i >= 0; i--) {
             if (isUnconflicted(schedule.get_eventData( ), classes[counter].get_lectures( )[i].get_lecture( ))) {
             // if there isn't a conflict between a lecture meeting and all the events already in schedule
