@@ -102,18 +102,19 @@ class Schedule //REWRITE TO HAVE SEPARATE STRING/EVENT VECTORS
 public:
     Schedule(std::vector<std::pair<std::string,Event> > data =
                 std::vector<std::pair<std::string,Event> >( ));
-    Schedule(std::vector<std::pair<Event,std::string> > data)
+    Schedule(std::vector<std::pair<Event,std::string> > data);
 
     int size( ) const;
     void set_data(std::vector<std::pair<std::string,Event> > newData);
     void set_data(std::vector<std::pair<Event,std::string> > newData);
-    std::vector<Event> Schedule::get_eventData( ) const;
-    std::vector<std::string> Schedule::get_strData( ) const;
+    std::vector<Event> get_eventData( ) const;
+    std::vector<std::string> get_strData( ) const;
     void add(std::string text, Event event);
     void add(Event event, std::string text);
     void add(std::pair<std::string,Event> event);
     void add(std::pair<Event,std::string> event);
-    bool remove(Event event);
+    bool remove(const Event event);
+    void pop_back( ); // undefined behavior on empty
 
     // void display( );
 private:
@@ -151,8 +152,8 @@ private:
     std::vector<Event> reservedSpots;
     std::vector<MinClass> classes;
 
-    void schedGenHelper(std::vector<Schedule> &schedules, int counter) const;
-    bool isUnconflicted(std::vector<Schedule> &schedules, const Event &event) const;
+    void generatorHelper(std::vector<Schedule> schedules, Schedule schedule, int counter) const;
+    bool isUnconflicted(std::vector<Event> schedules, const Event &event) const;
 };
 bool operator==(const ScheduleSet &lhs, const ScheduleSet &rhs);
 

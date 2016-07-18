@@ -2,6 +2,7 @@
 // Peter Master, 5/21
 
 #include "MinClass.h"
+#define FIVE 7
 
 Event::Event(std::vector<DayOfTheWeek> days, int start,
             int end, std::vector<int> dates) : days(days),
@@ -325,7 +326,7 @@ std::ostream& operator<<(std::ostream& os, const MinClass& obj) {
 
 Schedule::Schedule(std::vector<std::pair<std::string,Event> > data) :
        eventData(std::vector<Event>( )), strData(std::vector<std::string>( )) {
-    for (int i = 0; i < data; i++) {
+    for (int i = 0; i < data.size( ); i++) {
         strData.push_back(data[i].first);
         eventData.push_back(data[i].second);
     }
@@ -333,7 +334,7 @@ Schedule::Schedule(std::vector<std::pair<std::string,Event> > data) :
 
 Schedule::Schedule(std::vector<std::pair<Event,std::string> > data) :
        eventData(std::vector<Event>( )), strData(std::vector<std::string>( )) {
-    for (int i = 0; i < data; i++) {
+    for (int i = 0; i < data.size( ); i++) {
         eventData.push_back(data[i].first);
         strData.push_back(data[i].second);
     }
@@ -385,7 +386,7 @@ void Schedule::add(std::pair<Event,std::string> event) {
     strData.push_back(event.second);
 }
 
-bool Schedule::remove(Event event) {
+bool Schedule::remove(const Event event) {
     for (int i = 0; i < eventData.size( ); i++)
         if (event == eventData[i]) {
             eventData.erase(eventData.begin( ) + i);
@@ -393,6 +394,11 @@ bool Schedule::remove(Event event) {
             return true;
         }
     return false;
+}
+
+void Schedule::pop_back( ) {
+    eventData.pop_back( );
+    strData.pop_back( );
 }
 
 bool operator==(const Schedule &lhs, const Schedule &rhs) {
@@ -468,42 +474,66 @@ bool ScheduleSet::removeClass(MinClass oldClass) {
 
 
 
-
 std::vector<Schedule> ScheduleSet::generateSchedules( ) const {
     Schedule schedule;
     std::vector<Schedule> schedules;
-    for (int i = 0; i < reservedSpots.size( ); i++) {
-        if (isUnconflicted(schedule.get_data( ))
-    schedGenHelper(schedules, 0)
+
+    for (int i = 0; i < reservedSpots.size( ); i++)
+        if (isUnconflicted(schedule.get_eventData( ), reservedSpots[i]))
+            schedule.add(reservedSpots[i], "reserved");
+        else
+            return std::vector<Schedule>( );
+
+
+    generatorHelper(schedules, schedule, 0);
     return schedules;
 }
 
-void ScheduleSet::schedGenHelper(std::vector<Schedule> &schedules, Schedule schedule) const {
-    if (schedule.size( ) == reservedSpots.size( ) + classes.size( ))
+// ASSUMES THAT SECTIONS ARE REQUIRED IF AND ONLY IF THE LECTURE HAS ANY SECTIONS
+
+void ScheduleSet::generatorHelper(std::vector<Schedule> schedules, Schedule schedule, int counter) const {
+    if (counter == classes.size( ))
         schedules.push_back(schedule);
     else {
-
-
-
+        for (int i = classes[counter].get_lectures( ).size( ) - 1; i >= 0; i--) {
+            if (isUnconflicted(schedule.get_eventData( ), classes[counter].get_lectures( )[i].get_lecture( ))) {
+            // if there isn't a conflict between a lecture meeting and all the events already in schedule
+                schedule.add(classes[counter].get_lectures( )[i].get_lecture( ), classes[counter].get_courseID( ));
+                // add the pair of the lecture event and the courseID string (NTP: consider changing the string)
+                if (classes[counter].get_lectures( )[i].get_sections( ).size( )) { // if there exist sections for that lecture
+                    for (int j = classes[counter].get_lectures( )[i].get_sections( ).size( ) - 1; j >= 0; j--) {
+                        if (isUnconflicted(schedule.get_eventData( ), classes[counter].get_lectures( )[i].get_sections( )[j])) {
+                            schedule.add(classes[counter].get_lectures( )[i].get_sections( )[j], classes[counter].get_courseID( ));
+                            generatorHelper(schedules, schedule, counter + 1);
+                            schedule.pop_back( );
+                        }
+                    }
+                }
+                else {// there are no sections for the given lecture
+                    generatorHelper(schedules, schedule, counter + 1);
+                    schedule.pop_back( );
+                }
+            }
+        }
     }
 }
 
-bool ScheduleSet::isUnconflicted(const vector<Event> &events, const Event &event) const {
+bool ScheduleSet::isUnconflicted(const std::vector<Event> events, const Event &event) const {
     for (int i = 0; i < events.size( ); i++) {
         // test if there is any time overlap between event and events[i]
-        if (event.get_startTime( ) <= events[i].get_startTime) {
-            if (event.get_endTime( ) > events[i].get_startTime)
+        if (event.get_startTime( ) <= events[i].get_startTime( )) {
+            if (event.get_endTime( ) > events[i].get_startTime( ))
                 // test if there are any common days between event and events[i]
                 for (int j = 0; j < event.get_days( ).size( ); j++)
-                    for (int k = 0; k < events[i].get_days( ).size( )
+                    for (int k = 0; k < events[i].get_days( ).size( ); k++)
                         if (event.get_days( )[j] == events[i].get_days( )[k])
                             return false; // overlap between event and events[i]
         }
         // test if there is any time overlap between event and events[i]
-        else if (event.get_startTime( ) < events[i].get_endTime)
+        else if (event.get_startTime( ) < events[i].get_endTime( ))
             // test if there are any common days between event and events[i]
             for (int j = 0; j < event.get_days( ).size( ); j++)
-                for (int k = 0; k < events[i].get_days( ).size( )
+                for (int k = 0; k < events[i].get_days( ).size( ); k++)
                     if (event.get_days( )[j] == events[i].get_days( )[k])
                         return false; // overlap between event and events[i]
     }
