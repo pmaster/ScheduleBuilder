@@ -152,7 +152,7 @@ private:
     std::vector<Event> reservedSpots;
     std::vector<MinClass> classes;
 
-    void generatorHelper(std::vector<Schedule> schedules, Schedule schedule, int counter) const;
+    void generatorHelper(std::vector<Schedule>& schedules, Schedule schedule, int counter) const;
     bool isUnconflicted(std::vector<Event> schedules, const Event &event) const;
 };
 bool operator==(const ScheduleSet &lhs, const ScheduleSet &rhs);

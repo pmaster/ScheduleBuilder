@@ -87,20 +87,21 @@ std::istream& operator>>(std::istream& is, Event& obj) {
                 endTimeS = timesS.substr(10, 2) + timesS.substr(13, 2);
     startTime = atoi(startTimeS.c_str( ));
     endTime = atoi(endTimeS.c_str( ));
+
     if (startTime >= 1200) {
         if (timesS[5] == 'A')
             startTime -= 1200;
-        else if (timesS[5] == 'P') ;
+        else if (timesS[5] == 'P');
     }
     else if (timesS[5] == 'P')
         startTime += 1200;
-    obj.set_startTime(startTime);
+
     if (endTime >= 1200) {
-        if (timesS[5] == 'A')
+        if (timesS[15] == 'A')
             endTime -= 1200;
-        else if (timesS[5] == 'P') ;
+        else if (timesS[15] == 'P') ;
     }
-    else if (timesS[5] == 'P')
+    else if (timesS[15] == 'P')
         endTime += 1200;
 
     obj.set_startTime(startTime);
@@ -491,10 +492,14 @@ std::vector<Schedule> ScheduleSet::generateSchedules( ) const {
 
 // ASSUMES THAT SECTIONS ARE REQUIRED IF AND ONLY IF THE LECTURE HAS ANY SECTIONS
 
-void ScheduleSet::generatorHelper(std::vector<Schedule> schedules, Schedule schedule, int counter) const {
-    if (counter == classes.size( ))
+void ScheduleSet::generatorHelper(std::vector<Schedule>& schedules, Schedule schedule, int counter) const {
+    std::cout << "\nNIGGA" << schedules.size( );
+    if (counter == classes.size( )) {
         schedules.push_back(schedule);
+        std::cout << "YOLO";
+    }
     else {
+        std::cout << "hi" << counter;
         for (int i = classes[counter].get_lectures( ).size( ) - 1; i >= 0; i--) {
             if (isUnconflicted(schedule.get_eventData( ), classes[counter].get_lectures( )[i].get_lecture( ))) {
             // if there isn't a conflict between a lecture meeting and all the events already in schedule
@@ -632,6 +637,6 @@ std::string military_to_12hour(int time) {
     if (time < 1300)
         return std::string("12:") + sMinutes + std::string("PM");
     if (time == 2400)
-        return std::string("12:00 AM");
+        return std::string("12:00AM");
     return sHours + std::string(":") + sMinutes + std::string("PM");
 }
